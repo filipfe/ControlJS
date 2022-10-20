@@ -17,7 +17,7 @@ Install ControlJS with npm
 To run tests, run the following commands
 
 ```bash
-  cd tests
+  cd test
   npm run test
 ```
     

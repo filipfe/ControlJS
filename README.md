@@ -38,4 +38,4 @@ Install ControlJS with npm
 
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
-| `opacity`      | `number` | *Optional.* Opacity element would be transformed to. |
+| `opacity`      | `number` | *Optional.* Opacity that element would be transformed to. |

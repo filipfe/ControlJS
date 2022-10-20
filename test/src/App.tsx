@@ -7,7 +7,9 @@ export default function App() {
     <div className="app">
       <h1>Testing ControlJS Library</h1>
       <button onClick={() => setMount(prev => prev + 1)}>ReMount</button>
-      <Control element={<p>Hello World</p>} mount={mount} x={20} y={20} rotate={-50} ease='ease-out' opacity={1} />
+      <div className="test">
+        <Control element={<p>Hello World</p>} x={40} ease='ease-out' opacity={1} onScroll={true} />
+      </div>  
     </div>
   )
 }

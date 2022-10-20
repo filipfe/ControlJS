@@ -6,10 +6,10 @@ interface ControlProps {
     duration?: number,
     delay?: number,
     ease?: "ease-in" | "ease-out" | "ease-in-out",
-    mount?: number,
     x?: number | string,
     y?: number | string,
-    rotate?: number
+    rotate?: number,
+    onScroll?: boolean
 }
 
 type S = Omit<ControlProps, 'element' | 'mount' | 'x' | 'y' | 'rotate'>
@@ -19,16 +19,22 @@ interface Styles extends S {
 }
 
 export default function Control(props:ControlProps):JSX.Element {
-    const { element, mount, opacity, duration = 400, ease = 'cubic-bezier(0, 0, 1.0, 1.0)', delay = 0, x, y, rotate = 0 } = props;
+    const { element, opacity, duration = 400, ease = 'cubic-bezier(0, 0, 1.0, 1.0)', delay = 0, x, y, rotate = 0, onScroll } = props;
 
     const firstRender = useRef<boolean>(true)
     const timer = useRef<number | undefined>(undefined)
+    const wrapper = useRef<HTMLDivElement | null>(null!)
+    const isInViewPort = useRef<boolean>(wrapper.current?.getBoundingClientRect().top ? wrapper.current?.getBoundingClientRect().top < window.innerHeight /1.5 : false)
 
     // default values for styles
 
     const [styles, setStyles] = useState<Styles>({
         opacity: 0
     })
+
+    const checkViewPort = ():number | undefined => {
+        return wrapper.current?.getBoundingClientRect().top
+    }
 
     useEffect(() => {
 
@@ -59,22 +65,49 @@ export default function Control(props:ControlProps):JSX.Element {
 
         // changing values of different style properties
 
-        timer.current = setTimeout(() => {
-            setStyles(prev => {
-                return {
-                    ...prev,
-                    opacity: opacity,
-                    transform: `${translateValue} ${rotateValue}`
-                }
-            })
-        }, 400)
+        
 
-        return () => clearTimeout(timer.current)
-    }, [mount])
+        // onScroll mechanics
 
-    useEffect(() => {
-        console.log(styles)
-    }, [styles])
+        if(onScroll) {
+            const scrollCallback = () => {
+                let fromElement = checkViewPort()
 
-    return <div style={{...styles, transition: `all ${duration}ms ${ease} ${delay}ms`, maxWidth: 'max-content'}}>{element}</div>
+                isInViewPort.current = fromElement ? fromElement < window.innerHeight / 1.5 : false
+
+                if(isInViewPort.current) timer.current = setTimeout(() => {
+                    setStyles(prev => {
+                        return {
+                            ...prev,
+                            opacity: opacity,
+                            transform: `${translateValue} ${rotateValue}`
+                        }
+                    })
+                }, firstRender.current ? 1 : duration)
+            };
+            
+            window.addEventListener('scroll', scrollCallback);
+
+            return () => {
+                clearTimeout(timer.current);
+                window.removeEventListener('scroll', scrollCallback);
+            }
+        } else {
+            timer.current = setTimeout(() => {
+                setStyles(prev => {
+                    return {
+                        ...prev,
+                        opacity: opacity,
+                        transform: `${translateValue} ${rotateValue}`
+                    }
+                })
+            }, firstRender.current ? 1 : duration)
+        }
+
+        return () => {
+            clearTimeout(timer.current)
+        }
+    }, [])
+
+    return <div ref={wrapper} style={{...styles, transition: `all ${duration}ms ${ease} ${delay}ms`, maxWidth: 'max-content'}}>{element}</div>
 }

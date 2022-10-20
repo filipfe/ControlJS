@@ -18,6 +18,7 @@ To run tests, run the following commands
 
 ```bash
   cd test
+  npm install
   npm run test
 ```
     

@@ -76,6 +76,32 @@ Rotate defines if controlled element should be rotated. You can pass it a number
 | :-------- | :------- | :-------------------------------- |
 | `rotate`      | `number` | *Optional.* Rotation of the element. |
 
+### onScroll
+
+Boolean value which tells Control if the animation should occur as animated component enters the viewport or directly after render.
+
+
+```javascript
+  <Control element={<div>Hello World</div>} onScroll={true} />
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `onScroll`      | `boolean` | *Optional.* Enter viewport animation. |
+
+### viewPort
+
+Related to onScroll, passed as a number which defines at what point of viewport which element enters should the animation occur.
+
+
+```javascript
+  <Control element={<div>Hello World</div>} onScroll={true} viewPort={0.4} />
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `onScroll`      | `boolean` | *Optional.* Enter viewport animation. |
+
 ## OnScroll
 You have an access to the OnScroll component which can wrap multiple Control components giving each of them onScroll property.
 Notice you can pass other viewPort values to each of wrapped components and every of them would respect its own value.

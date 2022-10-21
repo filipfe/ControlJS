@@ -67,6 +67,11 @@ h1 {
 
 .test {
   max-width: max-content;
+  display: flex;
+}
+
+.on-scroll {
+  display: flex;
 }
 
 .app {

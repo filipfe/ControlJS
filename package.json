@@ -1,6 +1,6 @@
 {
-  "name": "control",
-  "version": "1.0.0",
+  "name": "react-control-js",
+  "version": "2.1.0",
   "description": "React library for creating animations",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
@@ -12,7 +12,7 @@
     "build:cjs": "tsc --module commonjs --outDir dist/cjs"
   },
   "files": [
-    "./dist"
+    "/dist"
   ],
   "repository": {
     "type": "git",

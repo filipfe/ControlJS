@@ -1,4 +1,4 @@
-import Control from "control"
+import Control, { OnScroll } from "control"
 import { useState } from "react"
 
 export default function App() {
@@ -8,7 +8,10 @@ export default function App() {
       <h1>Testing ControlJS Library</h1>
       <button onClick={() => setMount(prev => prev + 1)}>ReMount</button>
       <div className="test">
-        <Control element={<p>Hello World</p>} x={40} ease='ease-out' opacity={1} onScroll={true} />
+        <OnScroll className="on-scroll">
+          <Control element={<p>Hello World</p>} x={-40} ease='ease-out' mount={mount} viewPort={0.7} opacity={1} />
+          <Control element={<p>Hello World</p>} opacity={0.6} />
+        </OnScroll>
       </div>  
     </div>
   )

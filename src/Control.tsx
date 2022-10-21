@@ -1,15 +1,17 @@
 import React, { useEffect, useRef, useState } from "react"
 
 interface ControlProps {
-    element: JSX.Element,
-    opacity?: number,
-    duration?: number,
-    delay?: number,
-    ease?: "ease-in" | "ease-out" | "ease-in-out",
-    x?: number | string,
-    y?: number | string,
-    rotate?: number,
-    onScroll?: boolean
+    element: JSX.Element, // necessary element
+    opacity?: number, // if declared animate from 0 to provided number
+    duration?: number, // animation duration
+    delay?: number, // animation delay
+    ease?: "ease-in" | "ease-out" | "ease-in-out", // easing
+    x?: number | string, // movement on x axis
+    y?: number | string, // movement on y axis
+    rotate?: number, // rotation
+    onScroll?: boolean, // does it have to appear on scroll
+    viewPort?: number, // on what portion of the screen does the element have to appear
+    mount?: number // testing purposes
 }
 
 type S = Omit<ControlProps, 'element' | 'mount' | 'x' | 'y' | 'rotate'>
@@ -19,25 +21,26 @@ interface Styles extends S {
 }
 
 export default function Control(props:ControlProps):JSX.Element {
-    const { element, opacity, duration = 400, ease = 'cubic-bezier(0, 0, 1.0, 1.0)', delay = 0, x, y, rotate = 0, onScroll } = props;
+    const { element, opacity, duration = 400, ease = 'cubic-bezier(0, 0, 1.0, 1.0)', delay = 0, x, y, rotate = 0, onScroll, viewPort = 0.8 } = props;
 
     const firstRender = useRef<boolean>(true)
     const timer = useRef<number | undefined>(undefined)
     const wrapper = useRef<HTMLDivElement | null>(null!)
-    const isInViewPort = useRef<boolean>(wrapper.current?.getBoundingClientRect().top ? wrapper.current?.getBoundingClientRect().top < window.innerHeight /1.5 : false)
+    const isInViewPort = useRef<boolean>(false)
 
     // default values for styles
 
-    const [styles, setStyles] = useState<Styles>({
+    const [styles, setStyles] = useState<Styles>(opacity ? {
         opacity: 0
-    })
-
-    const checkViewPort = ():number | undefined => {
-        return wrapper.current?.getBoundingClientRect().top
-    }
+    } : {})
+ 
+    const setElementInViewPort = ():void => {
+        let fromElement = wrapper.current?.getBoundingClientRect().top
+        isInViewPort.current = fromElement ? fromElement < window.innerHeight * viewPort : false
+        console.log(fromElement ? fromElement < window.innerHeight * viewPort : false)
+    } 
 
     useEffect(() => {
-
         // testing purposes; setting default values for styles
 
         if(!firstRender.current) setStyles(prev => {
@@ -63,36 +66,9 @@ export default function Control(props:ControlProps):JSX.Element {
 
         let rotateValue: string = `rotate(${rotate}deg)`
 
-        // changing values of different style properties
+        // function setting styles for the element
 
-        
-
-        // onScroll mechanics
-
-        if(onScroll) {
-            const scrollCallback = () => {
-                let fromElement = checkViewPort()
-
-                isInViewPort.current = fromElement ? fromElement < window.innerHeight / 1.5 : false
-
-                if(isInViewPort.current) timer.current = setTimeout(() => {
-                    setStyles(prev => {
-                        return {
-                            ...prev,
-                            opacity: opacity,
-                            transform: `${translateValue} ${rotateValue}`
-                        }
-                    })
-                }, firstRender.current ? 1 : duration)
-            };
-            
-            window.addEventListener('scroll', scrollCallback);
-
-            return () => {
-                clearTimeout(timer.current);
-                window.removeEventListener('scroll', scrollCallback);
-            }
-        } else {
+        const setTimerWithStyles = ():void => {
             timer.current = setTimeout(() => {
                 setStyles(prev => {
                     return {
@@ -101,7 +77,31 @@ export default function Control(props:ControlProps):JSX.Element {
                         transform: `${translateValue} ${rotateValue}`
                     }
                 })
-            }, firstRender.current ? 1 : duration)
+            }, firstRender.current ? 1 : duration / 2)
+        }
+
+        // onScroll mechanics
+
+        const scrollCallback = () => {
+            setElementInViewPort()
+            if(isInViewPort.current) setTimerWithStyles()
+        };
+
+        if(onScroll) {
+            scrollCallback();
+
+            window.addEventListener('scroll', scrollCallback);
+
+            return () => {
+                clearTimeout(timer.current);
+                window.removeEventListener('scroll', scrollCallback);
+            }
+        }
+
+        // changing values of different style properties
+
+        if(!onScroll) {
+            setTimerWithStyles()
         }
 
         return () => {

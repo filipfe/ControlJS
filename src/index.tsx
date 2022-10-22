@@ -1,7 +1,7 @@
 import Control from "./Control";
-import OnScroll from "./OnScroll";
+import Controller from "./Controller";
 
 export default Control;
 export {
-    OnScroll
+    Controller
 }

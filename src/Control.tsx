@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react"
 
-interface ControlProps {
+export interface ControlProps {
     element: JSX.Element, // necessary element
     opacity?: number, // if declared animate from 0 to provided number
     duration?: number, // animation duration
@@ -10,7 +10,9 @@ interface ControlProps {
     y?: number | string, // movement on y axis
     rotate?: number, // rotation
     onScroll?: boolean, // does it have to appear on scroll
-    viewPort?: number, // on what portion of the screen does the element have to appear
+    viewPort?: number, // on what portion of the screen does the element have to appear,
+    backgroundColor?: string, // background color
+    color?: string, // background color
     mount?: number // testing purposes
 }
 
@@ -21,7 +23,8 @@ interface Styles extends S {
 }
 
 export default function Control(props:ControlProps):JSX.Element {
-    const { element, opacity, duration = 400, ease = 'cubic-bezier(0, 0, 1.0, 1.0)', delay = 0, x, y, rotate = 0, onScroll, viewPort = 0.8 } = props;
+    const { element, opacity, duration = 400, ease = 'cubic-bezier(0, 0, 1.0, 1.0)', delay = 0, x, y, rotate = 0, onScroll, viewPort = 0.8,
+    backgroundColor, color } = props;
 
     const firstRender = useRef<boolean>(true)
     const timer = useRef<number | undefined>(undefined)
@@ -30,9 +33,9 @@ export default function Control(props:ControlProps):JSX.Element {
 
     // default values for styles
 
-    const [styles, setStyles] = useState<Styles>(opacity ? {
-        opacity: 0
-    } : {})
+    const [styles, setStyles] = useState<Styles>({
+        ...(opacity && { opacity: 0 })
+    })
  
     const setElementInViewPort = ():void => {
         let fromElement = wrapper.current?.getBoundingClientRect().top
@@ -46,7 +49,7 @@ export default function Control(props:ControlProps):JSX.Element {
         if(!firstRender.current) setStyles(prev => {
             return {
                 ...prev,
-                opacity: 0,
+                ...(opacity && { opacity: 0 }),
                 transform: 'none'
             }
         })
@@ -73,8 +76,10 @@ export default function Control(props:ControlProps):JSX.Element {
                 setStyles(prev => {
                     return {
                         ...prev,
-                        opacity: opacity,
-                        transform: `${translateValue} ${rotateValue}`
+                        transform: `${translateValue} ${rotateValue}`,
+                        ...(opacity && { opacity: opacity }),
+                        ...(backgroundColor && { backgroundColor: backgroundColor }),
+                        ...(color && { color: color })
                     }
                 })
             }, firstRender.current ? 1 : duration / 2)

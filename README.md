@@ -34,6 +34,42 @@ Passed as a property to the Control component. Defines element that would be ren
 | :-------- | :------- | :------------------------- |
 | `element` | `JSX.Element` | **Required**. Animated element. |
 
+### duration
+
+Defines duration of the animation. Takes a number value which is compiled to ms units.
+
+```javascript
+  <Control element={<div>Hello World</div>} duration={200} />
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `duration`      | `number` | *Optional.* Duration of the animation. |
+
+### delay
+
+Defines delay of the animation. Takes a number value which is compiled to ms units.
+
+```javascript
+  <Control element={<div>Hello World</div>} delay={200} />
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `delay`      | `number` | *Optional.* Delay of the animation. |
+
+### ease
+
+Provides easing for animation and has a default value of `cubic-bezier(0, 0, 1, 1)`. You can pass it four values: `ease`, `ease-in`, `ease-out`, `ease-in-out`.
+
+```javascript
+  <Control element={<div>Hello World</div>} ease='ease-out' />
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `ease`      | `string` | *Optional.* Easing of the animation. |
+
 ### opacity
 Used to animate opacity, if it exists on Control component it will transition element's opacity from the value of 0 to the one passed in the property. 
 
@@ -76,6 +112,31 @@ Rotate defines if controlled element should be rotated. You can pass it a number
 | :-------- | :------- | :-------------------------------- |
 | `rotate`      | `number` | *Optional.* Rotation of the element. |
 
+### backgroundColor
+
+Changes background color of animated element.
+
+
+```javascript
+  <Control element={<div>Hello World</div>} backgroundColor={'blue'} />
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `backgroundColor`      | `string` | *Optional.* Background of the element. |
+
+### color
+
+Changes text color of animated element.
+
+```javascript
+  <Control element={<div>Hello World</div>} color='blue' />
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `color`      | `string` | *Optional.* Text color of the element. |
+
 ### onScroll
 
 Boolean value which tells Control if the animation should occur as animated component enters the viewport or directly after its render.
@@ -115,7 +176,7 @@ Using Controller is recommended if you'd like to perform actions on a group of e
 
   function App() {
       return (
-          <Controller onScroll={true}>
+          <Controller>
             <Control element={<p>Hello World!</p>} opacity={1} viewPort={0.2} />
             <Control element={<p>Hello World!</p>} opacity={1} viewPort={0.6} />
           </Controller>

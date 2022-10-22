@@ -115,7 +115,7 @@ Using Controller is recommended if you'd like to perform actions on a group of e
 
   function App() {
       return (
-          <Controller>
+          <Controller onScroll={true}>
             <Control element={<p>Hello World!</p>} opacity={1} viewPort={0.2} />
             <Control element={<p>Hello World!</p>} opacity={1} viewPort={0.6} />
           </Controller>

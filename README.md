@@ -9,7 +9,7 @@ ControlJS is a react library allowing you to create animations on components wit
 Install ControlJS with npm
 
 ```bash
-  npm install react-control-js
+  npm install control
 ```
     
 ## Usage/Examples
@@ -49,7 +49,7 @@ Used to animate opacity, if it exists on Control component it will transition el
 
 X and y are properties passed to the Control component which define the position that controlled element would be transformed to relative  to its position in DOM.
 
-You can either pass a number which will work as px unit or a string if you'd like something like percentage value.
+You can either pass a number which will work as px unit or a string if you'd need something like percentage value.
 
 
 ```javascript
@@ -65,7 +65,7 @@ You can either pass a number which will work as px unit or a string if you'd lik
 
 ### rotate
 
-Rotate defines if controlled element should be rotated. You can pass it a number which will act as deg unit.
+Rotate defines if controlled element should be rotated. You can pass it a number which will act as a deg unit.
 
 
 ```javascript
@@ -78,7 +78,7 @@ Rotate defines if controlled element should be rotated. You can pass it a number
 
 ### onScroll
 
-Boolean value which tells Control if the animation should occur as animated component enters the viewport or directly after render.
+Boolean value which tells Control if the animation should occur as animated component enters the viewport or directly after its render.
 
 
 ```javascript
@@ -91,7 +91,7 @@ Boolean value which tells Control if the animation should occur as animated comp
 
 ### viewPort
 
-Related to onScroll, passed as a number which defines at what point of viewport which element enters should the animation occur.
+Related to onScroll, passed as a number which defines at what point of viewport, which element enters, should the animation occur.
 
 
 ```javascript
@@ -102,60 +102,77 @@ Related to onScroll, passed as a number which defines at what point of viewport 
 | :-------- | :------- | :-------------------------------- |
 | `onScroll`      | `boolean` | *Optional.* Enter viewport animation. |
 
-## OnScroll
-You have an access to the OnScroll component which can wrap multiple Control components giving each of them onScroll property.
+## Controller
+You have an access to Controller component which can wrap multiple Control components giving each of them passed properties.
+For example you  can provide onScroll property only once with respect to all components.
 Notice you can pass other viewPort values to each of wrapped components and every of them would respect its own value.
 
-Using OnScroll is recommended only if you'd like to give one component from the group scroll animation which is relative to the other component in the group.
-Otherwise you can pass onScroll to every each of the animated components.
+Using Controller is recommended if you'd like to perform actions on a group of elements.
+
 
 ```javascript
-  import Control, { OnScroll } from 'react-control-js'
+  import Control, { Controller } from 'react-control-js'
 
   function App() {
       return (
-          <OnScroll>
+          <Controller>
             <Control element={<p>Hello World!</p>} opacity={1} viewPort={0.2} />
             <Control element={<p>Hello World!</p>} opacity={1} viewPort={0.6} />
-          </OnScroll>
+          </Controller>
       )
   }
 ```
 
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
-| `OnScroll`      | `Component` | Wrap multiple elements with onScroll property |
+| `Controller`      | `Component` | Perform actions on multiple elements |
 
 ### className
 
-You can pass className property to OnScroll component which acts exactly as normal className React property.
+You can pass className property to Controller component which acts exactly as normal className React property.
 
 ```javascript
-  import Control, { OnScroll } from 'react-control-js'
+  import Control, { Controller } from 'react-control-js'
 
   function App() {
       return (
-          <OnScroll className="flex flex-col">
+          <Controller className="flex flex-col">
             <Control element={<p>Hello World!</p>} opacity={1} viewPort={0.2} />
             <Control element={<p>Hello World!</p>} opacity={1} viewPort={0.6} />
-          </OnScroll>
+          </Controller>
       )
   }
 ```
 ### stagger
 
-Stagger is a property for OnScroll component which defines delay for every component in a group.
-For example if you pass it a value of 1, every component would start its animation when the previous one finishes.
+Stagger is a property for Controller component which defines delay for every component in a group.
+For example if you pass it a value of 100, each subsequent component will start its animation every 100ms.
 
 ```javascript
-  import Control, { OnScroll } from 'react-control-js'
+  import Control, { Controller } from 'react-control-js'
 
   function App() {
       return (
-          <OnScroll stagger={1}>
+          <Controller stagger={100}>
             <Control element={<p>Hello World!</p>} opacity={1} viewPort={0.2} />
             <Control element={<p>Hello World!</p>} opacity={1} viewPort={0.6} />
-          </OnScroll>
+          </Controller>
+      )
+  }
+```
+### Possible Properties
+
+You can pass every property that Control component has available except `element` to the Controller component and it will spread it around all Controls in a wrapped group.
+
+```javascript
+  import Control, { Controller } from 'react-control-js'
+
+  function App() {
+      return (
+          <Controller x={20} y={'-40%'} opacity={1} rotate={180} stagger={300}>
+            <Control element={<p>Hello World!</p>} />
+            <Control element={<p>Hello World!</p>} />
+          </Controller>
       )
   }
 ```

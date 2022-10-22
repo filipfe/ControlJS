@@ -9,7 +9,7 @@ ControlJS is a react library allowing you to create animations on components wit
 Install ControlJS with npm
 
 ```bash
-  npm install control
+  npm install react-control-js
 ```
     
 ## Usage/Examples

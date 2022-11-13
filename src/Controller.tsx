@@ -3,14 +3,14 @@ import { ControlProps } from './Control'
 
 type C = Omit<ControlProps, 'element' | 'mount'>
 
-interface Props extends C {
+export interface ControllerProps extends C {
     children: JSX.Element | JSX.Element[],
     className?: string,
     stagger?: number,
     onScroll?: boolean
 }
 
-export default function Controller(props: Props):JSX.Element {
+export default function Controller(props: ControllerProps):JSX.Element {
     const { children, className, stagger, ...rest } = props;
 
     let delay: number = 0;
